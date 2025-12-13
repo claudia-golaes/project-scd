@@ -1,0 +1,42 @@
+{% extends "base_page_template.html" %}
+
+{% block title %}Favorites{% endblock %}
+
+{% block content %}
+<div class="animal-container">
+    <h1>Favorites</h1>
+
+    {% if not animals %}
+        <div style="text-align: center; padding: 50px;">
+            <a href="{% url 'animals' %}" class="cta-button">See animals</a>
+        </div>
+    {% else %}
+    
+    <div class="animal-grid" style="display: flex; flex-wrap: wrap; gap: 20px;">
+        {% for animal in animals %}
+        <div class="animal-card" style="border: 1px solid #ddd; padding: 15px; width: 300px; border-radius: 8px;">
+            
+            {% if animal.image %}
+                <img src="{{ animal.image.url }}" alt="{{ animal.name }}" style="width: 100%; height: 200px; object-fit: cover;">
+            {% else %}
+                <div style="height: 200px; background: #eee;">No photo</div>
+            {% endif %}
+
+            <h2>{{ animal.name }}</h2>
+
+            <form action="{% url 'toggle_favorite' animal.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" style="background: none; border: none; font-size: 24px; cursor: pointer; color: red;">
+                    ❤️
+                </button>
+            </form>
+
+            <p><strong>Rasă:</strong> {{ animal.breed }}</p>
+            <p><strong>Status:</strong> {{ animal.get_status_display }}</p>
+            
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

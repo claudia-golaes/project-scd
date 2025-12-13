@@ -1,0 +1,86 @@
+{% extends "base_page_template.html" %}
+
+{% block title %}Edit {{ animal.name }} - HappyTails{% endblock %}
+
+{% block content %}
+<style>
+    .current-image {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .current-image img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #ffc107;
+    }
+</style>
+
+<div class="form-container">
+    {% if animal.image %}
+    <div class="current-image">
+        <p>Current image:</p>
+        <img src="{{ animal.image.url }}" alt="{{ animal.name }}">
+    </div>
+    {% endif %}
+
+    <h2>{{ animal.name }}</h2>
+
+
+    <p><strong>Breed:</strong> {{ animal.breed }}</p>
+    <p><strong>Age:</strong> {{ animal.age }}</p>
+    <p><strong>Size:</strong> {{ animal.get_size_display }}</p>
+    <p><strong>Story:</strong> <br> {{ animal.story|truncatewords:20 }}</p>
+
+    <p>
+    <p>
+        <strong>Status:</strong>
+        <span class="status-{{ animal.status }}">
+            {{ animal.get_status_display }}
+        </span>
+    </p>
+    </p>
+    <form action="{% url 'toggle_favorite' animal.id %}" method="POST" style="display: inline;">
+        {% csrf_token %}
+        {% if user in animal.favorites.all and 'client' in user_roles %}
+        <button type="submit" title="remove_from_favorites"
+            style="background: none; border: none; font-size: 24px; cursor: pointer; color: red;">
+            ❤️
+        </button>
+        {% else %}
+        <button type="submit" title="add_to_favorites"
+            style="background: none; border: none; font-size: 24px; cursor: pointer; color: grey;">
+            🤍
+        </button>
+        {% endif %}
+    </form>
+
+    {% if 'client' in user_roles %}
+    <div>
+        <a href="{% url 'edit_animal' animal.id %}">
+            Adopt me!
+        </a>
+    </div>
+    {% endif %}
+    {% if 'volunteer' in user_roles or 'admin' in user_roles %}
+    <div>
+        <a href="{% url 'edit_animal' animal.id %}">
+            Edit me!
+        </a>
+    </div>
+    {% endif %}
+    {% if 'admin' in user_roles %}
+    <form action="{% url 'delete_animal' animal.id %}" method="POST" style="display:inline;"
+        onsubmit="return confirm('Ești sigur că vrei să ștergi cățelușul pe nume {{ animal.name }}?');">
+        {% csrf_token %}
+        <button type="submit" style="color: red; border: none; background: none; cursor: pointer; font-weight: bold;">
+            Delete me!
+        </button>
+    </form>
+    {% endif %}
+    <a href="{% url 'animals' %}"
+        style="display:block; text-align:center; margin-top:1rem; text-decoration:none; color:#666;">Back to Animals</a>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base_page_template.html" %}
+
+{% block title %}Home - HappyTails{% endblock %}
+
+{% block content %}
+<style>
+    .welcome-section {
+        text-align: center;
+        padding: 2rem 0;
+    }
+    .welcome-section h1 {
+        color: #004080;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    .welcome-section p {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 2rem;
+    }
+    .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+    .cta-button {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.3s;
+        display: inline-block;
+    }
+    .cta-primary {
+        background-color: #004080;
+        color: white;
+    }
+    .cta-secondary {
+        background-color: #28a745;
+        color: white;
+    }
+</style>
+
+<div class="welcome-section">
+    <h1>Welcome to HappyTails</h1>
+    {% if user.is_authenticated %}
+        <p>Hello, <strong>{{ username }}</strong></p>
+        {% if role_info %}
+            <p style="font-size: 0.95rem; color: #004080;">Your roles: <strong>{{ role_info }}</strong></p>
+        {% endif %}
+    {% else %}
+        <p>Sing in or create account</p>
+    {% endif %}
+</div>
+
+{% if not user.is_authenticated %}
+<div class="cta-buttons" style="flex-direction: column; max-width: 450px; margin: 0 auto;">
+    <a href="{% url 'oidc_authentication_init' %}" class="cta-button cta-primary">Sign In</a>
+    <div style="text-align: center; margin: 1.5rem 0; color: #999; position: relative;">
+        <span style="background: white; padding: 0 1rem; position: relative; z-index: 1;">OR</span>
+        <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background-color: #ddd; z-index: 0;"></div>
+    </div>
+    <a href="{% url 'register' %}" class="cta-button cta-secondary">Create New Account</a>
+</div>
+{% else %}
+<div class="cta-buttons">
+    <a href="{% url 'animals' %}" class="cta-button cta-primary">View Animals</a>
+    <a href="{% url 'profile' %}" class="cta-button cta-secondary">My Profile</a>
+    {% if user_roles %}
+        {% if 'admin' in user_roles %}
+            <a href="{% url 'admin_dashboard' %}" class="cta-button" style="background-color: #dc3545;">Admin Dashboard</a>
+        {% endif %}
+        {% if 'volunteer' in user_roles %}
+            <a href="{% url 'volunteer_dashboard' %}" class="cta-button" style="background-color: #17a2b8;">Volunteer Dashboard</a>
+        {% endif %}
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

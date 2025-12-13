@@ -1,0 +1,59 @@
+{% extends "base_page_template.html" %}
+
+{% block title %}Edit {{ animal.name }} - HappyTails{% endblock %}
+
+{% block content %}
+<style>
+    .form-container {
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border-top: 5px solid #ffc107; 
+    }
+    .form-control, .form-select { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px; }
+    .btn-submit { background-color: #ffc107; color: #000; padding: 1rem; width: 100%; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;}
+    .btn-submit:hover { background-color: #e0a800; }
+    
+    .current-image {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .current-image img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #ffc107;
+    }
+</style>
+
+<div class="form-container">
+    <h2 style="text-align: center; color: #333;">Edit: {{ animal.name }}</h2>
+
+    {% if animal.image %}
+    <div class="current-image">
+        <p>Current image:</p>
+        <img src="{{ animal.image.url }}" alt="{{ animal.name }}">
+    </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div class="form-group">
+            <label><b>{{ field.label }}</b></label>
+            {{ field }}
+            {% if field.errors %}
+                <div style="color: red;">{{ field.errors }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn-submit">Save</button>
+        <a href="{% url 'animals' %}" style="display:block; text-align:center; margin-top:1rem; text-decoration:none; color:#666;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

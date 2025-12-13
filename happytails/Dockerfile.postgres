@@ -1,0 +1,4 @@
+FROM postgres:15-alpine
+
+# Copy initialization script with proper permissions
+COPY --chmod=755 init-databases.sh /docker-entrypoint-initdb.d/
