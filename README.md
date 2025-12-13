@@ -31,8 +31,8 @@ Pentru a implementa aceste functionalități, soluția va expune următoarele **
 ### Rute Client
 - [x] `GET /animals` - Căutare animale disponibile
 - [x] `GET /animals/{id}` - Detalii animal specific
-- [] `POST /adoptions` - Completare formular de adopție
-- [] `GET /adoptions` - Istoricul aplicațiilor proprii
+- [ ] `POST /adoptions` - Completare formular de adopție
+- [ ] `GET /adoptions` - Istoricul aplicațiilor proprii
 - [ ] `POST /adoptions/{id}/schedule` - Programare vizită la adăpost
 - [ ] `GET /adoptions/{id}` - Verificare status aplicație (aprobată/respinsă)
 - [ ] `POST /donations/one-time` - Donație unică prin card
@@ -69,18 +69,18 @@ Pentru a implementa aceste functionalități, soluția va expune următoarele **
 
 ### Rute Admin
 - [x] `GET /animals` - Căutare animale disponibile
-- [] `GET /adoptions` - Lista toate aplicațiile de adopție
-- [] `GET /adoptions/{id}` - Detalii aplicație specifică
-- [] `PUT /adoptions/{id}/approve` - Aprobare aplicație
-- [] `PUT /adoptions/{id}/reject` - Respingere aplicație
+- [ ] `GET /adoptions` - Lista toate aplicațiile de adopție
+- [ ] `GET /adoptions/{id}` - Detalii aplicație specifică
+- [ ] `PUT /adoptions/{id}/approve` - Aprobare aplicație
+- [ ] `PUT /adoptions/{id}/reject` - Respingere aplicație
 - [ ] `POST /adoptions/{id}/finalize` - Finalizare adopție
 - [ ] `GET /donations` - Dashboard cu istoric complet donații
 - [ ] `GET /donations/stats` - Statistici donații
 - [x] `POST /animals` - Înregistrare animale noi cu informații de bază (specie, rasă, vârstă)
 - [x] `PUT /animals/edit/{id}` - Actualizare informații animal
 - [x] `DELETE /animals/{id}` - Ștergere animal
-- [x] `GET /animals/{id}/history` - Tracking complet istoric (dată sosire, proveniență, vaccinări)
-- [x] `PUT /animals/{id}/history` - Actualizare istoric
+- [ ] `GET /animals/{id}/history` - Tracking complet istoric (dată sosire, proveniență, vaccinări)
+- [ ] `PUT /animals/{id}/history` - Actualizare istoric
 - [ ] `GET /activities` - Monitorizare status activități (completate/necompletate)
 - [ ] `GET /activities/pending` - Lista activități necompletate
 - [ ] `GET /reports` - Vizualizare rapoarte probleme de la voluntari
@@ -92,7 +92,7 @@ Pentru a implementa aceste functionalități, soluția va expune următoarele **
 - [ ] `GET /volunteers/{id}` - Detalii profil voluntar specific
 - [ ] `PUT /volunteers/{id}/activate` - Activare cont voluntar
 - [ ] `PUT /volunteers/{id}/deactivate` - Dezactivare cont voluntar
-- [] `GET /settings` - Configurări generale adăpost (nume, contact, program)
+- [ ] `GET /settings` - Configurări generale adăpost (nume, contact, program)
 - [ ] `PUT /settings` - Actualizare setări generale
 - [ ] `GET /users` - Management utilizatori (roluri, permisiuni)
 - [ ] `PUT /users/{id}/role` - Modificare rol utilizator
