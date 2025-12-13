@@ -21,20 +21,83 @@ Pentru a implementa aceste functionalități, soluția va expune următoarele **
 | POST      /login              \- Login utilizator (redirect SSO Keycloak) POST      /logout             \- Logout GET       /callback           \- OAuth callback (Keycloak) |
 | :---- |
 
-- Rute **client**:
+## API Routes Implementation Status
 
-| GET      /animals                 \- Căutare animale disponibile  GET      /animals/{id}            \- Detalii animal specific POST     /adoptions               \- Completare formular de adopție GET      /adoptions               \- Istoricul aplicațiilor proprii POST     /adoptions/{id}/schedule \- Programare vizită la adăpost GET      /adoptions/{id}          \- Verificare status aplicație (aprobată/respinsă) POST     /donations/one-time      \- Donație unică prin card POST     /donations/recurring     \- Donație recurentă (lunară/anuală) GET      /donations               \- Istoric donații proprii DELETE   /donations/{id}/cancel   \- Anulare plată recurentă GET      /animals                 \- Vizualizare animale disponibile POST     /favorites               \- Adăugare animal la favorite GET      /favorites               \- Lista animale favorite DELETE   /favorites/{id}          \- Ștergere animal din favorite GET      /client/stats            \- Istoric personal (aplicații, donații, animale adoptate) GET      /profile                 \- Setări cont personal PUT      /profile/notifications   \- Preferințe notificări (email, push) |
-| :---- |
+### Autentificare (Publice)
+- [x] `POST /login` - Login utilizator (redirect SSO Keycloak)
+- [x] `POST /logout` - Logout
+- [x] `GET /callback` - OAuth callback (Keycloak)
 
-- Rute **voluntar**:
+### Rute Client
+- [x] `GET /animals` - Căutare animale disponibile
+- [x] `GET /animals/{id}` - Detalii animal specific
+- [] `POST /adoptions` - Completare formular de adopție
+- [] `GET /adoptions` - Istoricul aplicațiilor proprii
+- [ ] `POST /adoptions/{id}/schedule` - Programare vizită la adăpost
+- [ ] `GET /adoptions/{id}` - Verificare status aplicație (aprobată/respinsă)
+- [ ] `POST /donations/one-time` - Donație unică prin card
+- [ ] `POST /donations/recurring` - Donație recurentă (lunară/anuală)
+- [ ] `GET /donations` - Istoric donații proprii
+- [ ] `DELETE /donations/{id}/cancel` - Anulare plată recurentă
+- [x] `POST /favorites` - Adăugare animal la favorite
+- [x] `GET /favorites` - Lista animale favorite
+- [x] `DELETE /favorites/{id}` - Ștergere animal din favorite
+- [ ] `GET /client/stats` - Istoric personal (aplicații, donații, animale adoptate)
+- [x] `GET /profile` - Setări cont personal
+- [ ] `PUT /profile/notifications` - Preferințe notificări (email, push)
 
-| GET      /animals                 \- Căutare animale disponibile PUT        /animals/edit/{id}      \- Actualizare informații animal GET       /visits        \- Lista vizite programate (întâlniri adoptator-animal) POST     /visits/{id}/confirm     \- Confirmare participare la întâlnire POST     /visits/{id}/report      \- Raport post-vizită GET      /animals/{id}            \- Vizualizare detalii animal PUT      /animals/{id}/info       \- Completare informații (personalitate, poveste) GET      /animals/{id}/history    \- Tracking complet istoric (dată sosire, proveniență, vaccinări) PUT      /animals/{id}/history    \- Actualizare istoric (vaccinări, evenimente) GET       /dashboard     \- Vizualizare dashboard zilnic cu sarcini (plimbări, hrănit, spălat, curățenie) GET      /activities              \- Calendar personal cu activități programate POST     /activities/{id}/complete \- Marcare activitate completată cu timestamp POST     /activities/{id}/accept  \- Acceptare task din notificare (sistem Be My Eyes) POST     /reports                 \- Raportare probleme/observații (sănătate, comportament) GET      /reports                 \- Istoric rapoarte proprii GET       /stats         \- Statistici personale (activități, ore voluntariat) GET       /history       \- Istoric activități completate GET       /profile       \- Setări cont personal PUT       /notifications \- Preferințe notificări (email, push) |
-| :---- |
+### Rute Voluntar
+- [x] `GET /animals` - Căutare animale disponibile
+- [x] `PUT /animals/edit/{id}` - Actualizare informații animal
+- [ ] `GET /visits` - Lista vizite programate (întâlniri adoptator-animal)
+- [ ] `POST /visits/{id}/confirm` - Confirmare participare la întâlnire
+- [ ] `POST /visits/{id}/report` - Raport post-vizită
+- [x] `GET /animals/{id}` - Vizualizare detalii animal
+- [x] `PUT /animals/{id}/info` - Completare informații (personalitate, poveste)
+- [ ] `GET /animals/{id}/history` - Tracking complet istoric (dată sosire, proveniență, vaccinări)
+- [ ] `PUT /animals/{id}/history` - Actualizare istoric (vaccinări, evenimente)
+- [x] `GET /dashboard` - Vizualizare dashboard zilnic cu sarcini (plimbări, hrănit, spălat, curățenie)
+- [ ] `GET /activities` - Calendar personal cu activități programate
+- [ ] `POST /activities/{id}/complete` - Marcare activitate completată cu timestamp
+- [ ] `POST /activities/{id}/accept` - Acceptare task din notificare (sistem Be My Eyes)
+- [ ] `POST /reports` - Raportare probleme/observații (sănătate, comportament)
+- [ ] `GET /reports` - Istoric rapoarte proprii
+- [ ] `GET /stats` - Statistici personale (activități, ore voluntariat)
+- [ ] `GET /history` - Istoric activități completate
+- [x] `GET /profile` - Setări cont personal
+- [ ] `PUT /notifications` - Preferințe notificări (email, push)
 
-- Rute **admin**:
-
-| GET      /animals                 \- Căutare animale disponibile GET        /adoptions         \- Lista toate aplicațiile de adopție GET        /adoptions/{id}    \- Detalii aplicație specifică PUT        /adoptions/{id}/approve  \- Aprobare aplicație PUT        /adoptions/{id}/reject   \- Respingere aplicație POST       /adoptions/{id}/finalize \- Finalizare adopție GET        /donations         \- Dashboard cu istoric complet donații GET        /donations/stats   \- Statistici donații  POST       /animals           \- Înregistrare animale noi cu informații de bază (specie, rasă, vârstă) PUT        /animals/edit/{id}      \- Actualizare informații animal DELETE     /animals/{id}      \- Ștergere animal GET        /animals/{id}/history \- Tracking complet istoric (dată sosire, proveniență, vaccinări) PUT        /animals/{id}/history \- Actualizare istoric GET        /activities        \- Monitorizare status activități (completate/necompletate) GET        /activities/pending \- Lista activități necompletate  GET        /reports           \- Vizualizare rapoarte probleme de la voluntari PUT        /reports/{id}/resolve \- Marcare problemă ca rezolvată POST       /activities        \- Creare activitate/task nouă GET        /stats/adoptions   \- Raport adopții GET        /stats/donations   \- Raport donații  GET         /volunteers        \- Vizualizare profiluri \+ performanța voluntari GET         /volunteers/{id}   \- Detalii profil voluntar specific PUT         /volunteers/{id}/activate   \- Activare cont voluntar PUT         /volunteers/+{id}/deactivate \- Dezactivare cont voluntar GET        /settings          \- Configurări generale adăpost (nume, contact, program) PUT        /settings          \- Actualizare setări generale GET        /users             \- Management utilizatori (roluri, permisiuni) PUT        /users/{id}/role   \- Modificare rol utilizator GET        /templates         \- Configurare template-uri email PUT        /templates/{id}    \- Editare template email specific |
-| :---- |
+### Rute Admin
+- [x] `GET /animals` - Căutare animale disponibile
+- [] `GET /adoptions` - Lista toate aplicațiile de adopție
+- [] `GET /adoptions/{id}` - Detalii aplicație specifică
+- [] `PUT /adoptions/{id}/approve` - Aprobare aplicație
+- [] `PUT /adoptions/{id}/reject` - Respingere aplicație
+- [ ] `POST /adoptions/{id}/finalize` - Finalizare adopție
+- [ ] `GET /donations` - Dashboard cu istoric complet donații
+- [ ] `GET /donations/stats` - Statistici donații
+- [x] `POST /animals` - Înregistrare animale noi cu informații de bază (specie, rasă, vârstă)
+- [x] `PUT /animals/edit/{id}` - Actualizare informații animal
+- [x] `DELETE /animals/{id}` - Ștergere animal
+- [x] `GET /animals/{id}/history` - Tracking complet istoric (dată sosire, proveniență, vaccinări)
+- [x] `PUT /animals/{id}/history` - Actualizare istoric
+- [ ] `GET /activities` - Monitorizare status activități (completate/necompletate)
+- [ ] `GET /activities/pending` - Lista activități necompletate
+- [ ] `GET /reports` - Vizualizare rapoarte probleme de la voluntari
+- [ ] `PUT /reports/{id}/resolve` - Marcare problemă ca rezolvată
+- [ ] `POST /activities` - Creare activitate/task nouă
+- [ ] `GET /stats/adoptions` - Raport adopții
+- [ ] `GET /stats/donations` - Raport donații
+- [ ] `GET /volunteers` - Vizualizare profiluri + performanța voluntari
+- [ ] `GET /volunteers/{id}` - Detalii profil voluntar specific
+- [ ] `PUT /volunteers/{id}/activate` - Activare cont voluntar
+- [ ] `PUT /volunteers/{id}/deactivate` - Dezactivare cont voluntar
+- [] `GET /settings` - Configurări generale adăpost (nume, contact, program)
+- [ ] `PUT /settings` - Actualizare setări generale
+- [ ] `GET /users` - Management utilizatori (roluri, permisiuni)
+- [ ] `PUT /users/{id}/role` - Modificare rol utilizator
+- [ ] `GET /templates` - Configurare template-uri email
+- [ ] `PUT /templates/{id}` - Editare template email specific
 
 Funcții avansate:
 
