@@ -16,13 +16,6 @@ In cadrul proiectului voi implementa o platforma pentru adoptația animalelor. V
 
 Pentru a implementa aceste functionalități, soluția va expune următoarele **rute**:
 
-- Autentificare (**Publice**):
-
-| POST      /login              \- Login utilizator (redirect SSO Keycloak) POST      /logout             \- Logout GET       /callback           \- OAuth callback (Keycloak) |
-| :---- |
-
-## API Routes Implementation Status
-
 ### Autentificare (Publice)
 - [x] `POST /login` - Login utilizator (redirect SSO Keycloak)
 - [x] `POST /logout` - Logout
