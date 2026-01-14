@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Animal, Adoption
+from .models import Animal, Adoption, Visit
 from django.contrib.auth.models import User
 
 
@@ -116,7 +116,7 @@ class AdoptionCreateSerializer(serializers.ModelSerializer):
     
     def validate_animal(self, value):
         if value.status != 'AV':
-            raise serializers.ValidationError("Acest animal nu este disponibil pentru adopție.")
+            raise serializers.ValidationError("This animal is not available for adoption.")
         
         user = self.context['request'].user
         existing = Adoption.objects.filter(
@@ -126,7 +126,7 @@ class AdoptionCreateSerializer(serializers.ModelSerializer):
         ).exists()
         
         if existing:
-            raise serializers.ValidationError("Ai deja o aplicație în așteptare pentru acest animal.")
+            raise serializers.ValidationError("You already have a pending application for this animal.")
         
         return value
     
@@ -144,3 +144,77 @@ class AdoptionScheduleVisitSerializer(serializers.Serializer):
 class AdoptionReviewSerializer(serializers.Serializer):
     """admin review serializer"""
     rejection_reason = serializers.CharField(required=False, allow_blank=True)
+
+
+
+class VisitListSerializer(serializers.ModelSerializer):
+    """visits list serializer"""
+    animal_name = serializers.CharField(source='adoption.animal.name', read_only=True)
+    animal_breed = serializers.CharField(source='adoption.animal.breed', read_only=True)
+    client_name = serializers.CharField(source='adoption.user.username', read_only=True)
+    client_email = serializers.CharField(source='adoption.user.email', read_only=True)
+    volunteer_name = serializers.CharField(source='volunteer.username', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    
+    class Meta:
+        model = Visit
+        fields = [
+            'id', 'adoption', 'animal_name', 'animal_breed',
+            'client_name', 'client_email', 'volunteer', 'volunteer_name',
+            'scheduled_date', 'status', 'status_display', 'created_at'
+        ]
+        read_only_fields = ['id', 'created_at']
+
+
+class VisitDetailSerializer(serializers.ModelSerializer):
+    """visit detail serializer"""
+    animal_details = serializers.SerializerMethodField()
+    adoption_details = serializers.SerializerMethodField()
+    client_details = serializers.SerializerMethodField()
+    volunteer_name = serializers.CharField(source='volunteer.username', read_only=True)
+    scheduled_by_name = serializers.CharField(source='scheduled_by.username', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    recommendation_display = serializers.CharField(source='get_recommendation_display', read_only=True)
+    
+    class Meta:
+        model = Visit
+        fields = '__all__'
+        read_only_fields = ['id', 'created_at', 'confirmed_at', 'completed_at', 'scheduled_by']
+    
+    def get_animal_details(self, obj):
+        from myapp.serializers import AnimalSerializer
+        return AnimalSerializer(obj.adoption.animal, context=self.context).data
+    
+    def get_adoption_details(self, obj):
+        return {
+            'id': obj.adoption.id,
+            'status': obj.adoption.status,
+            'status_display': obj.adoption.get_status_display(),
+            'application_date': obj.adoption.application_date,
+            'phone': obj.adoption.phone,
+            'address': obj.adoption.address,
+        }
+    
+    def get_client_details(self, obj):
+        return {
+            'id': obj.adoption.user.id,
+            'username': obj.adoption.user.username,
+            'email': obj.adoption.user.email,
+            'first_name': obj.adoption.user.first_name,
+            'last_name': obj.adoption.user.last_name,
+        }
+
+
+class VisitConfirmSerializer(serializers.Serializer):
+    notes = serializers.CharField(required=False, allow_blank=True)
+
+
+class VisitReportSerializer(serializers.Serializer):
+    """report serializer"""
+    report = serializers.CharField()
+    animal_behavior = serializers.CharField()
+    client_interaction = serializers.CharField()
+    recommendation = serializers.ChoiceField(
+        choices=[('AP', 'Approve'), ('RJ', 'Reject'), ('PD', 'Pending')]
+    )
+    notes = serializers.CharField(required=False, allow_blank=True)

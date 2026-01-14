@@ -70,3 +70,49 @@ class Adoption(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.animal.name} ({self.get_status_display()})"
+    
+
+
+class Visit(models.Model):
+    STATUS_CHOICES = (
+        ('SC', 'Scheduled'),
+        ('CF', 'Confirmed'), 
+        ('CM', 'Completed'),
+        ('CN', 'Cancelled'),
+    )
+
+    adoption = models.ForeignKey(Adoption, on_delete=models.CASCADE, related_name='visits')
+    volunteer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='volunteer_visits')
+    
+    # schedule
+    scheduled_date = models.DateTimeField()
+    scheduled_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='scheduled_visits')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    # status
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='SC')
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+
+    # report post-visit
+    completed_at = models.DateTimeField(null=True, blank=True)
+    report = models.TextField(blank=True, help_text="Raport despre cum a decurs vizita")
+    animal_behavior = models.TextField(blank=True, help_text="Comportamentul animalului")
+    client_interaction = models.TextField(blank=True, help_text="Interacțiunea cu clientul")
+    recommendation = models.CharField(
+        max_length=2,
+        choices=(
+            ('AP', 'Approve'),
+            ('RJ', 'Reject'),
+            ('PD', 'Pending'),
+        ),
+        blank=True
+    )
+    
+    # notes
+    notes = models.TextField(blank=True)
+    
+    class Meta:
+        ordering = ['-scheduled_date']
+    
+    def __str__(self):
+        return f"Visit {self.id} - {self.adoption.animal.name} ({self.get_status_display()})"

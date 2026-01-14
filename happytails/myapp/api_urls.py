@@ -2,10 +2,13 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import api_views
 from myapp.views.adoption_views import AdoptionViewSet 
+from myapp.views.visit_views import VisitViewSet
+
 
 router = DefaultRouter()
 router.register(r'animals', api_views.AnimalViewSet, basename='animal')
 router.register(r'adoptions', AdoptionViewSet, basename='adoption') 
+router.register(r'visits', VisitViewSet, basename='visit')  
 
 urlpatterns = [
     path('', api_views.home, name='home'),

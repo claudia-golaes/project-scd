@@ -108,11 +108,20 @@ class AdoptionViewSet(viewsets.ModelViewSet):
             adoption.visit_notes = serializer.validated_data.get('visit_notes', '')
             adoption.save()
             
+            from myapp.models import Visit
+            visit = Visit.objects.create(
+                adoption=adoption,
+                scheduled_date=adoption.visit_date,
+                scheduled_by=request.user,
+                notes=adoption.visit_notes,
+                status='SC'
+            )
             
             return Response({
                 'success': True,
                 'message': 'Your visit has been scheduled successfully.',
                 'data': {
+                    'visit_id': visit.id,
                     'visit_date': adoption.visit_date,
                     'visit_notes': adoption.visit_notes
                 }
