@@ -150,7 +150,7 @@ def register_view(request):
         'scope': settings.OIDC_RP_SCOPES,
         'state': state,
         'response_type': 'code',
-        'kc_action': 'REGISTER',  #
+        'kc_action': 'REGISTER',  
     }
 
     if getattr(settings, 'OIDC_USE_NONCE', True):
