@@ -165,26 +165,6 @@ def register_view(request):
     return redirect(auth_url)
 
 @login_required
-@role_required('admin')
-def admin_dashboard(request):
-    roles = get_user_roles(request)
-    context = {
-        'username': request.user.username,
-        'user_roles': roles,
-    }
-    return render(request, "admin_dashboard.html", context)
-
-@login_required
-@role_required('volunteer')
-def volunteer_dashboard(request):
-    roles = get_user_roles(request)
-    context = {
-        'username': request.user.username,
-        'user_roles': roles,
-    }
-    return render(request, "volunteer_dashboard.html", context)
-
-@login_required
 def debug_view(request):
     oidc_claims = request.session.get('oidc_id_token_claims', {})
     access_token = request.session.get('oidc_access_token', '')

@@ -116,3 +116,110 @@ class Visit(models.Model):
     
     def __str__(self):
         return f"Visit {self.id} - {self.adoption.animal.name} ({self.get_status_display()})"
+    
+
+class Activity(models.Model):
+    ACTIVITY_TYPES = (
+        ('WLK', 'Walk'),
+        ('FED', 'Feed'),
+        ('CLN', 'Cleaning'),
+        ('BTH', 'Bath'),
+        ('MED', 'Medication'),
+        ('PLY', 'Play time'),
+        ('TRN', 'Training'),
+        ('OTH', 'Other'),
+    )
+    
+    STATUS_CHOICES = (
+        ('PD', 'Pending'),
+        ('AS', 'Assigned'),
+        ('IP', 'In Progress'),
+        ('CM', 'Completed'),
+        ('CN', 'Cancelled'),
+        ('OV', 'Overdue'),
+    )
+    
+    PRIORITY_CHOICES = (
+        ('LW', 'Low'),
+        ('MD', 'Medium'),
+        ('HG', 'High'),
+        ('UR', 'Urgent'),
+    )
+    
+    # info 
+    animal = models.ForeignKey(Animal, on_delete=models.CASCADE, related_name='activities')
+    activity_type = models.CharField(max_length=3, choices=ACTIVITY_TYPES)
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    
+    # schedule
+    scheduled_time = models.DateTimeField()
+    deadline = models.DateTimeField(help_text="Până când trebuie completată")
+    duration_minutes = models.IntegerField(default=30, help_text="Duration in minutes")
+    
+    # status & priority
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='PD')
+    priority = models.CharField(max_length=2, choices=PRIORITY_CHOICES, default='MD')
+    
+    # assignment
+    assigned_to = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='assigned_activities'
+    )
+    assigned_at = models.DateTimeField(null=True, blank=True)
+
+    # completion
+    completed_by = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='completed_activities'
+    )
+    completed_at = models.DateTimeField(null=True, blank=True)
+    completion_notes = models.TextField(blank=True)
+    
+    # created info
+    created_by = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        related_name='created_activities'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    # inspired by "be my eyes"
+    notification_round = models.IntegerField(default=0, help_text="Notifications round (0=none, 1-3=rounds)")
+    notified_volunteers = models.ManyToManyField(
+        User, 
+        related_name='notified_activities', 
+        blank=True,
+        help_text="Volunteers who have been notified for this activity"
+    )
+    
+    # recurrence
+    is_recurring = models.BooleanField(default=False)
+    recurrence_pattern = models.CharField(
+        max_length=20, 
+        blank=True,
+        choices=(
+            ('DAILY', 'Zilnic'),
+            ('WEEKLY', 'Săptămânal'),
+            ('MONTHLY', 'Lunar'),
+        )
+    )
+    
+    class Meta:
+        ordering = ['deadline', '-priority']
+        verbose_name_plural = 'Activities'
+    
+    def __str__(self):
+        return f"{self.get_activity_type_display()} - {self.animal.name} ({self.get_status_display()})"
+    
+    def is_overdue(self):
+        from django.utils import timezone
+        return self.status in ['PD', 'AS', 'IP'] and self.deadline < timezone.now()

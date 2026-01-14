@@ -1,5 +1,6 @@
+from datetime import timezone
 from rest_framework import serializers
-from .models import Animal, Adoption, Visit
+from .models import Animal, Adoption, Visit, Activity
 from django.contrib.auth.models import User
 
 
@@ -217,4 +218,114 @@ class VisitReportSerializer(serializers.Serializer):
     recommendation = serializers.ChoiceField(
         choices=[('AP', 'Approve'), ('RJ', 'Reject'), ('PD', 'Pending')]
     )
+    notes = serializers.CharField(required=False, allow_blank=True)
+
+class ActivityListSerializer(serializers.ModelSerializer):
+    """serializer for activity list"""
+    animal_name = serializers.CharField(source='animal.name', read_only=True)
+    animal_id = serializers.IntegerField(source='animal.id', read_only=True)
+    activity_type_display = serializers.CharField(source='get_activity_type_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    priority_display = serializers.CharField(source='get_priority_display', read_only=True)
+    assigned_to_name = serializers.CharField(source='assigned_to.username', read_only=True, allow_null=True)
+    is_overdue = serializers.SerializerMethodField()
+    time_until_deadline = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Activity
+        fields = [
+            'id', 'animal_id', 'animal_name', 'activity_type', 'activity_type_display',
+            'title', 'scheduled_time', 'deadline', 'duration_minutes',
+            'status', 'status_display', 'priority', 'priority_display',
+            'assigned_to', 'assigned_to_name', 'is_overdue', 'time_until_deadline'
+        ]
+        read_only_fields = ['id']
+    
+    def get_is_overdue(self, obj):
+        return obj.is_overdue()
+    
+    def get_time_until_deadline(self, obj):
+        """returns the time until the deadline in a hr format"""
+        from django.utils import timezone
+        if obj.deadline > timezone.now():
+            delta = obj.deadline - timezone.now()
+            hours = delta.total_seconds() / 3600
+            if hours < 1:
+                return f"{int(delta.total_seconds() / 60)} minute"
+            elif hours < 24:
+                return f"{int(hours)} ore"
+            else:
+                return f"{int(hours / 24)} zile"
+        return "Expired"
+
+
+class ActivityDetailSerializer(serializers.ModelSerializer):
+    """serializer for detailed activity information"""
+    animal_details = serializers.SerializerMethodField()
+    activity_type_display = serializers.CharField(source='get_activity_type_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    priority_display = serializers.CharField(source='get_priority_display', read_only=True)
+    assigned_to_name = serializers.CharField(source='assigned_to.username', read_only=True, allow_null=True)
+    completed_by_name = serializers.CharField(source='completed_by.username', read_only=True, allow_null=True)
+    created_by_name = serializers.CharField(source='created_by.username', read_only=True, allow_null=True)
+    is_overdue = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Activity
+        fields = '__all__'
+        read_only_fields = [
+            'id', 'created_at', 'updated_at', 'assigned_at', 'completed_at',
+            'created_by', 'completed_by', 'notification_round'
+        ]
+    
+    def get_animal_details(self, obj):
+        return {
+            'id': obj.animal.id,
+            'name': obj.animal.name,
+            'breed': obj.animal.breed,
+            'age': obj.animal.age,
+        }
+    
+    def get_is_overdue(self, obj):
+        return obj.is_overdue()
+
+
+class ActivityCreateSerializer(serializers.ModelSerializer):
+    """serializer for creating activity (admin)"""
+    class Meta:
+        model = Activity
+        fields = [
+            'animal', 'activity_type', 'title', 'description',
+            'scheduled_time', 'deadline', 'duration_minutes',
+            'priority', 'assigned_to', 'is_recurring', 'recurrence_pattern'
+        ]
+    
+    def validate(self, data):
+        if data['deadline'] <= data['scheduled_time']:
+            raise serializers.ValidationError("Deadline-ul trebuie să fie după timpul programat.")
+        
+        if data.get('is_recurring') and not data.get('recurrence_pattern'):
+            raise serializers.ValidationError("Pentru activități recurente trebuie specificat pattern-ul.")
+        
+        return data
+    
+    def create(self, validated_data):
+        validated_data['created_by'] = self.context['request'].user
+        if validated_data.get('assigned_to'):
+            validated_data['status'] = 'AS'
+            validated_data['assigned_at'] = timezone.now()
+        return super().create(validated_data)
+
+
+class ActivityCompleteSerializer(serializers.Serializer):
+    """activity completion serializer"""
+    completion_notes = serializers.CharField(required=True)
+    
+    def validate_completion_notes(self, value):
+        if len(value) < 10:
+            raise serializers.ValidationError("Completion notes must be at least 10 characters long.")
+        return value
+
+
+class ActivityAcceptSerializer(serializers.Serializer):
     notes = serializers.CharField(required=False, allow_blank=True)
