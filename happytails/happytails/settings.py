@@ -138,9 +138,6 @@ OIDC_RP_CLIENT_ID = os.environ.get('OIDC_RP_CLIENT_ID', 'project-client')
 OIDC_RP_CLIENT_SECRET = os.environ.get('OIDC_RP_CLIENT_SECRET', 'QUMf2W089NKFq4UaykDkL9gAuH9H36Ke')
 
 # Keycloak endpoints
-# When running locally (outside Docker), all endpoints should use localhost
-# When running in Docker, backend endpoints should use the service name 'keycloak'
-# IMPORTANT: All endpoints must use the same hostname (localhost OR keycloak) to match the token issuer
 OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get(
     'OIDC_OP_AUTHORIZATION_ENDPOINT',
     'http://localhost:8080/realms/project-realm/protocol/openid-connect/auth'
@@ -191,8 +188,9 @@ LOGIN_URL = '/oidc/authenticate/'
 OIDC_AUTHENTICATION_CALLBACK_URL = 'oidc_authentication_callback'
 
 # Session settings for OIDC
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_SECURE = False 
 SESSION_COOKIE_SAMESITE = 'Lax'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
