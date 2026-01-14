@@ -69,14 +69,6 @@
 <div class="cta-buttons">
     <a href="{% url 'animals' %}" class="cta-button cta-primary">View Animals</a>
     <a href="{% url 'profile' %}" class="cta-button cta-secondary">My Profile</a>
-    {% if user_roles %}
-        {% if 'admin' in user_roles %}
-            <a href="{% url 'admin_dashboard' %}" class="cta-button" style="background-color: #dc3545;">Admin Dashboard</a>
-        {% endif %}
-        {% if 'volunteer' in user_roles %}
-            <a href="{% url 'volunteer_dashboard' %}" class="cta-button" style="background-color: #17a2b8;">Volunteer Dashboard</a>
-        {% endif %}
-    {% endif %}
 </div>
 {% endif %}
 {% endblock %}
