@@ -22,10 +22,10 @@ Pentru a implementa aceste functionalități, soluția va expune următoarele **
 ### Rute Client
 - [x] `GET /animals` - Căutare animale disponibile
 - [x] `GET /animals/{id}` - Detalii animal specific
-- [ ] `POST /adoptions` - Completare formular de adopție
-- [ ] `GET /adoptions` - Istoricul aplicațiilor proprii
-- [ ] `POST /adoptions/{id}/schedule` - Programare vizită la adăpost
-- [ ] `GET /adoptions/{id}` - Verificare status aplicație (aprobată/respinsă)
+- [x] `POST /adoptions` - Completare formular de adopție
+- [x] `GET /adoptions` - Istoricul aplicațiilor proprii
+- [x] `POST /adoptions/{id}/schedule` - Programare vizită la adăpost
+- [x] `GET /adoptions/{id}` - Verificare status aplicație (aprobată/respinsă)
 - [ ] `POST /donations/one-time` - Donație unică prin card
 - [ ] `POST /donations/recurring` - Donație recurentă (lunară/anuală)
 - [ ] `GET /donations` - Istoric donații proprii
@@ -40,17 +40,17 @@ Pentru a implementa aceste functionalități, soluția va expune următoarele **
 ### Rute Voluntar
 - [x] `GET /animals` - Căutare animale disponibile
 - [x] `PUT /animals/edit/{id}` - Actualizare informații animal
-- [ ] `GET /visits` - Lista vizite programate (întâlniri adoptator-animal)
-- [ ] `POST /visits/{id}/confirm` - Confirmare participare la întâlnire
-- [ ] `POST /visits/{id}/report` - Raport post-vizită
+- [x] `GET /visits` - Lista vizite programate (întâlniri adoptator-animal)
+- [x] `POST /visits/{id}/confirm` - Confirmare participare la întâlnire
+- [x] `POST /visits/{id}/report` - Raport post-vizită
 - [x] `GET /animals/{id}` - Vizualizare detalii animal
 - [x] `PUT /animals/{id}/info` - Completare informații (personalitate, poveste)
 - [ ] `GET /animals/{id}/history` - Tracking complet istoric (dată sosire, proveniență, vaccinări)
 - [ ] `PUT /animals/{id}/history` - Actualizare istoric (vaccinări, evenimente)
 - [x] `GET /dashboard` - Vizualizare dashboard zilnic cu sarcini (plimbări, hrănit, spălat, curățenie)
-- [ ] `GET /activities` - Calendar personal cu activități programate
-- [ ] `POST /activities/{id}/complete` - Marcare activitate completată cu timestamp
-- [ ] `POST /activities/{id}/accept` - Acceptare task din notificare (sistem Be My Eyes)
+- [x] `GET /activities` - Calendar personal cu activități programate
+- [x] `POST /activities/{id}/complete` - Marcare activitate completată cu timestamp
+- [x] `POST /activities/{id}/accept` - Acceptare task din notificare (sistem Be My Eyes)
 - [ ] `POST /reports` - Raportare probleme/observații (sănătate, comportament)
 - [ ] `GET /reports` - Istoric rapoarte proprii
 - [ ] `GET /stats` - Statistici personale (activități, ore voluntariat)
@@ -60,11 +60,11 @@ Pentru a implementa aceste functionalități, soluția va expune următoarele **
 
 ### Rute Admin
 - [x] `GET /animals` - Căutare animale disponibile
-- [ ] `GET /adoptions` - Lista toate aplicațiile de adopție
-- [ ] `GET /adoptions/{id}` - Detalii aplicație specifică
-- [ ] `PUT /adoptions/{id}/approve` - Aprobare aplicație
-- [ ] `PUT /adoptions/{id}/reject` - Respingere aplicație
-- [ ] `POST /adoptions/{id}/finalize` - Finalizare adopție
+- [x] `GET /adoptions` - Lista toate aplicațiile de adopție
+- [x] `GET /adoptions/{id}` - Detalii aplicație specifică
+- [x] `PUT /adoptions/{id}/approve` - Aprobare aplicație
+- [x] `PUT /adoptions/{id}/reject` - Respingere aplicație
+- [x] `POST /adoptions/{id}/finalize` - Finalizare adopție
 - [ ] `GET /donations` - Dashboard cu istoric complet donații
 - [ ] `GET /donations/stats` - Statistici donații
 - [x] `POST /animals` - Înregistrare animale noi cu informații de bază (specie, rasă, vârstă)
@@ -72,11 +72,11 @@ Pentru a implementa aceste functionalități, soluția va expune următoarele **
 - [x] `DELETE /animals/{id}` - Ștergere animal
 - [ ] `GET /animals/{id}/history` - Tracking complet istoric (dată sosire, proveniență, vaccinări)
 - [ ] `PUT /animals/{id}/history` - Actualizare istoric
-- [ ] `GET /activities` - Monitorizare status activități (completate/necompletate)
-- [ ] `GET /activities/pending` - Lista activități necompletate
+- [x] `GET /activities` - Monitorizare status activități (completate/necompletate)
+- [x] `GET /activities/pending` - Lista activități necompletate
 - [ ] `GET /reports` - Vizualizare rapoarte probleme de la voluntari
 - [ ] `PUT /reports/{id}/resolve` - Marcare problemă ca rezolvată
-- [ ] `POST /activities` - Creare activitate/task nouă
+- [x] `POST /activities` - Creare activitate/task nouă
 - [ ] `GET /stats/adoptions` - Raport adopții
 - [ ] `GET /stats/donations` - Raport donații
 - [ ] `GET /volunteers` - Vizualizare profiluri + performanța voluntari
